@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+/* Light mode colors */
+:root {
+  --foreground: #000000;
+  --muted: #f0f0f0;
+  --muted-foreground: #555555;
+  --accent: #3b82f6; /* blue-500 */
+  --background: #ffffff;
+}
+
+/* Dark mode colors */
+.dark {
+  --foreground: #ffffff;
+  --muted: #1a1a1a;
+  --muted-foreground: #aaaaaa;
+  --accent: #60a5fa; /* blue-400 */
+  --background: #121212;
+}
+
+/* Apply colors to body */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.3s, color 0.3s;
+}
