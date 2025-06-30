@@ -33,7 +33,7 @@ export default function AgentReferSchemesPage() {
       }
 
       try {
-        const res = await fetch('http://127.0.0.1:8080/api/agent/refer/schemes', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/agent/refer/schemes`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json'
@@ -58,7 +58,10 @@ export default function AgentReferSchemesPage() {
   }, [])
 
   const handleCopy = (scheme: Scheme) => {
-    const referUrl = `${scheme.app_url}?vendor_code=${scheme.bank.vendor_code}`
+    
+    const vendor_code = localStorage.getItem('agent_slug');
+
+    const referUrl = `${scheme.app_url}?vendor_code=${vendor_code}`
     navigator.clipboard.writeText(referUrl)
       .then(() => toast.success(`Copied ${scheme.title} scheme URL`))
       .catch(() => toast.error('Failed to copy URL'))

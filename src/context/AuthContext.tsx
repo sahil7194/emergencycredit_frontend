@@ -83,6 +83,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(null)
     } else {
       const data = await res.json()
+      
+      if(data.type == 1){
+
+        localStorage.setItem("agent_slug", data.slug);
+      }
       setUser(data)
     }
   } catch {

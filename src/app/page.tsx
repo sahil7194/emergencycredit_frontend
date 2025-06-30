@@ -184,7 +184,7 @@ export default function HomePage() {
             Check your CIBIL score and apply for instant credit based on your profile. Fast, secure, and hassle-free.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 flex-wrap">
-            <Link href="/cibil-check">
+            <Link href="/check-cibil">
               <Button className="text-white bg-white/10 hover:bg-white/20">Check CIBIL</Button>
             </Link>
             <Link href="/signup">

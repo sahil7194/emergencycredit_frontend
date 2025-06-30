@@ -23,7 +23,6 @@ const footerLinks = [
     title: 'Resource',
     items: [
       { href: '/agent/signup', label: 'Be Agent' },
-      { href: '/crm/signup', label: 'CRM Signup' }
     ],
   },
 ]
@@ -31,8 +30,8 @@ const footerLinks = [
 const socialLinks = [
   { href: 'https://facebook.com', icon: Facebook, label: 'Facebook' },
   { href: 'https://twitter.com', icon: Twitter, label: 'Twitter' },
-  { href: 'https://instagram.com', icon: Instagram, label: 'Instagram' },
-  { href: 'https://linkedin.com', icon: Linkedin, label: 'LinkedIn' },
+  { href: 'https://www.instagram.com/emergency_credit/', icon: Instagram, label: 'Instagram' },
+  { href: 'https://www.linkedin.com/company/emergency-credits/', icon: Linkedin, label: 'LinkedIn' },
 ]
 
 const Footer = () => {
