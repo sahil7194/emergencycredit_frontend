@@ -4,6 +4,7 @@ import { Metadata } from 'next'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
+import { ClientApplyButton } from '@/components/ui/client-apply-button'
 
 interface Scheme {
   id: number
@@ -68,7 +69,7 @@ export default async function SchemeDetailPage({ params }: { params: Promise<{ s
   const scheme = await getSchemeBySlug(slug)
   if (!scheme) return notFound()
 
-  const redirectUnAuthUser = "/login?ref="+ slug;
+  const redirectUnAuthUser = "/login?ref=" + slug;
 
   return (
     <section className="py-12 px-4 md:px-6 lg:px-8">
@@ -142,31 +143,9 @@ export default async function SchemeDetailPage({ params }: { params: Promise<{ s
 
         <CardFooter className="flex justify-center mt-10">
 
-          {
-            user ? (
-              <>
-
-                <div className="w-full max-w-sm">
-                  <a href={scheme.redirection_link} target="_blank" rel="noopener noreferrer">
-                    <Button className="w-full" variant="outline">
-                      Apply Now
-                    </Button>
-                  </a>
-                </div>
-
-              </>) : (
-              <>
-
-                <div className="w-full max-w-sm">
-                  <a href={redirectUnAuthUser}  rel="noopener noreferrer">
-                    <Button className="w-full" variant="outline">
-                      Login 
-                    </Button>
-                  </a>
-                </div>
-              </>
-            )
-          }
+          <div className="w-full max-w-sm">
+            <ClientApplyButton slug={scheme.slug} applyLink={scheme.redirection_link} />
+          </div>
 
 
         </CardFooter>
