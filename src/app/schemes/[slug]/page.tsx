@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Metadata } from 'next'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { ClientApplyButton } from '@/components/ui/client-apply-button'
 
@@ -63,13 +62,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function SchemeDetailPage({ params }: { params: Promise<{ slug: string }> }) {
 
-  const user = false;
 
   const { slug } = await params
   const scheme = await getSchemeBySlug(slug)
   if (!scheme) return notFound()
 
-  const redirectUnAuthUser = "/login?ref=" + slug;
 
   return (
     <section className="py-12 px-4 md:px-6 lg:px-8">

@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import { LoaderCircle } from 'lucide-react'
 import { InputError } from '@/components/input-error'
 import AppLayout from '@/layouts/app-layout'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 
 const logo = {
@@ -22,7 +22,6 @@ const logo = {
 const Login = () => {
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
-  const searchParams = useSearchParams()
   const { fetchUser } = useAuth()
 
   const [email, setEmail] = useState('')
@@ -30,12 +29,22 @@ const Login = () => {
   const [remember, setRemember] = useState(false)
   const [processing, setProcessing] = useState(false)
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
+  const [redirectUrl, setRedirectUrl] = useState('/user')
 
   useEffect(() => {
     setMounted(true)
+
+    // Get token and redirect if already logged in
     const token = localStorage.getItem('token')
     if (token) {
       router.push('/user')
+    }
+
+    // Read query params from window
+    const params = new URLSearchParams(window.location.search)
+    const ref = params.get('ref')
+    if (ref) {
+      setRedirectUrl('/schemes/' + ref)
     }
   }, [router])
 
@@ -45,8 +54,6 @@ const Login = () => {
     e.preventDefault()
     setProcessing(true)
     setErrors({})
-
-    const redirectUrl =  searchParams.get('ref') ? 'schemes/' + searchParams.get('ref') : '/user';
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/signin`, {
@@ -65,7 +72,6 @@ const Login = () => {
         await fetchUser()
 
         const userType = Number(data.user?.type)
-
         if (userType === 0) {
           router.push(redirectUrl)
         } else if (userType === 2) {

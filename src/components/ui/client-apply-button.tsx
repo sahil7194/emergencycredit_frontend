@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 
 interface Props {
   slug: string
@@ -13,7 +13,6 @@ export const ClientApplyButton = ({ slug, applyLink }: Props) => {
   const [tokenAvailable, setTokenAvailable] = useState(false)
   const [applying, setApplying] = useState(false)
   const searchParams = useSearchParams()
-  const router = useRouter()
 
   const vendor = searchParams.get('vendor_code')
 
