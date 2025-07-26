@@ -1,4 +1,3 @@
-// app/(auth)/signup/page.tsx
 import SignupForm from './signup-form'
 
 export const metadata = {

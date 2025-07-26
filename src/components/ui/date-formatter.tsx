@@ -1,4 +1,3 @@
-// src/components/ui/date-formatter.tsx
 'use client'
 
 import { format } from 'date-fns'

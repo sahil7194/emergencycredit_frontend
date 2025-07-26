@@ -64,7 +64,6 @@ const Header = () => {
   if (user?.type === '0') {
     navLinks.unshift({ href: '/user', label: 'Home' })
     navLinks = navLinks.concat([
-      // { href: '/user/profile', label: 'Profile' },
       { href: '/user/application-history', label: 'Application History' },
     ])
   } else if (user?.type === '1') {
@@ -74,7 +73,6 @@ const Header = () => {
       { href: '/schemes', label: 'Schemes' },
       { href: '/agent/refer-schemes', label: 'Refer Schemes' },
       { href: '/agent/reference-history', label: 'Reference History' },
-      // { href: '/agent/profile', label: 'Profile' },
     ]
   } else if (user?.type === '2') {
     navLinks = [

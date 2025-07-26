@@ -1,4 +1,3 @@
-// src/context/AuthContext.tsx
 'use client'
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
@@ -30,36 +29,6 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
-
-  // Fetch user from token
-  // const fetchUser = async () => {
-  //   const token = localStorage.getItem('token')
-  //   if (!token) {
-  //     setUser(null)
-  //     setLoading(false)
-  //     return
-  //   }
-
-  //   try {
-  //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/profile`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         Accept: 'application/json',
-  //       },
-  //     })
-
-  //     if (!res.ok) {
-  //       setUser(null)
-  //     } else {
-  //       const data = await res.json()
-  //       setUser(data)
-  //     }
-  //   } catch {
-  //     setUser(null)
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
 
   const fetchUser = async () => {
   const token = localStorage.getItem('token')
