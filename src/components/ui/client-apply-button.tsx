@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { useSearchParams } from 'next/navigation'
+import { Label } from '@radix-ui/react-label'
+import { InputError } from '../input-error'
+import { Input } from './input'
 
 interface Props {
   slug: string
@@ -13,8 +16,9 @@ export const ClientApplyButton = ({ slug, applyLink }: Props) => {
   const [tokenAvailable, setTokenAvailable] = useState(false)
   const [applying, setApplying] = useState(false)
   const searchParams = useSearchParams()
+  const [vendorCode, setVendorCode] = useState('')
 
-  const vendor = searchParams.get('vendor_code')
+  const vendor = searchParams.get('vendor_code') ?? '';
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -36,7 +40,7 @@ export const ClientApplyButton = ({ slug, applyLink }: Props) => {
         },
         body: JSON.stringify({
           slug: slug,
-          agent: vendor,
+          agent: vendorCode,
         }),
       })
 
@@ -65,9 +69,27 @@ export const ClientApplyButton = ({ slug, applyLink }: Props) => {
     )
   }
 
+  function handleChange(arg0: string, value: string): void {
+
+    const updateCode = value ?? vendor;
+
+    setVendorCode(updateCode)
+  
+  }
+
   return (
-    <Button className="w-full" variant="outline" onClick={handleApply} disabled={applying}>
-      {applying ? 'Applying...' : 'Apply Now'}
-    </Button>
+    <>
+      <div className="flex flex-col gap-1 mb-3">
+        <Input
+          id="code"
+          onBlur={(e) => handleChange('code', e.target.value)}
+          placeholder='code'
+        />
+      </div>
+      <Button className="w-full" variant="outline" onClick={handleApply} disabled={applying}>
+        {applying ? 'Applying...' : 'Apply Now'}
+      </Button>
+    </>
+
   )
 }

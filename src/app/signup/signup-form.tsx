@@ -20,15 +20,15 @@ export default function SignupForm() {
     if (token) {
       router.push('/user')
     }
-      setMounted(true);
+    setMounted(true);
   }, []);
- const [form, setForm] = useState({
-  name: '',
-  mobile: '',
-  email: '',
-  password: '',
-  type: 0,  // <-- added here
-});
+  const [form, setForm] = useState({
+    name: '',
+    mobile: '',
+    email: '',
+    password: '',
+    type: 0,  // <-- added here
+  });
 
   const [errors, setErrors] = useState<Partial<typeof form>>({})
   const [processing, setProcessing] = useState(false)
@@ -39,34 +39,62 @@ export default function SignupForm() {
     setForm(prev => ({ ...prev, [field]: value }))
   }
 
-  const handleSubmit = async (e: FormEvent) => {
-  e.preventDefault()
-  setProcessing(true)
-  setErrors({})
 
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/signup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json','Accept': 'application/json' },
-      body: JSON.stringify(form),
-    })
+  const validateEmail  = async (email: string) =>{
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/validate-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({email:email}),
+      })
 
-   console.log('Response status:', res.status);
-if (!res.ok) {
-  const data = await res.json();
-  console.log('Error response:', data);
-  setErrors(data.errors || { email: 'Signup failed' });
-}
- else {
-      router.push('/login')
+      console.log('Response status:', res.status);
+      if (res.ok) {
+        const data = await res.json();
+        
+        if(!data.success){
+
+           setErrors({ email: 'This email ID is already registered.' })
+        }
+    
+        
+      }
+      
+    } catch (err) {
+      console.error('Update error:', err);
+      setErrors({ email: 'Something went wrong. Please try again.' })
     }
-  } catch (err) {
-    console.error('Update error:', err);
-    setErrors({ email: 'Something went wrong. Please try again.' })
+    console.log(email+"validate email");
   }
 
-  setProcessing(false)
-}
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    setProcessing(true)
+    setErrors({})
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(form),
+      })
+
+      console.log('Response status:', res.status);
+      if (!res.ok) {
+        const data = await res.json();
+        console.log('Error response:', data);
+        setErrors(data.errors || { email: 'Signup failed' });
+      }
+      else {
+        router.push('/login')
+      }
+    } catch (err) {
+      console.error('Update error:', err);
+      setErrors({ email: 'Something went wrong. Please try again.' })
+    }
+
+    setProcessing(false)
+  }
 
   return (
     <AppLayout>
@@ -81,37 +109,37 @@ if (!res.ok) {
                 >
                   {/* // eslint-disable-next-line @next/next/no-img-element */}
                   <div className="text-black dark:text-white w-8 h-8">
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-full h-full"
-  >
-    <path
-      d="M12 2L20 6V12C20 16.97 16.42 21.63 12 22C7.58 21.63 4 16.97 4 12V6L12 2Z"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      fill="none"
-    />
-    <path
-      d="M9 12L11 14L15 10"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <text
-      x="12"
-      y="19.5"
-      fontSize="8"
-      fill="currentColor"
-      fontFamily="Arial"
-      textAnchor="middle"
-    >
-      ₹
-    </text>
-  </svg>
-</div>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-full h-full"
+                    >
+                      <path
+                        d="M12 2L20 6V12C20 16.97 16.42 21.63 12 22C7.58 21.63 4 16.97 4 12V6L12 2Z"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        fill="none"
+                      />
+                      <path
+                        d="M9 12L11 14L15 10"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <text
+                        x="12"
+                        y="19.5"
+                        fontSize="8"
+                        fill="currentColor"
+                        fontFamily="Arial"
+                        textAnchor="middle"
+                      >
+                        ₹
+                      </text>
+                    </svg>
+                  </div>
 
                 </a>
                 <h1 className="text-xl font-bold md:text-2xl">Signup</h1>
@@ -154,6 +182,7 @@ if (!res.ok) {
                     required
                     type="email"
                     autoComplete="email"
+                    onBlur={(e) => { validateEmail(e.target.value)}}
                   />
                   <InputError message={errors.email} />
                 </div>

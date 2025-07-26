@@ -12,6 +12,7 @@ import { InputError } from '@/components/input-error'
 import AppLayout from '@/layouts/app-layout'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
+import toast from 'react-hot-toast'
 
 const logo = {
   url: '/',
@@ -66,12 +67,16 @@ const Login = () => {
       console.log('Login response:', data)
 
       if (!res.ok || !data.token) {
-        setErrors(data.errors || { email: 'Invalid credentials' })
+        setErrors(data.errors || { email: 'Incorrect login ID or password.' })
       } else {
+
         localStorage.setItem('token', data.token)
         await fetchUser()
 
         const userType = Number(data.user?.type)
+
+        toast.success('Login successful. Welcome back!');
+
         if (userType === 0) {
           router.push(redirectUrl)
         } else if (userType === 2) {
@@ -213,9 +218,9 @@ const Login = () => {
               </form>
 
               <div className="text-muted-foreground mt-8 flex justify-center gap-1 text-sm">
-                <p>{`Don't have an account?`}</p>
+                <p>{`New here? `}</p>
                 <Link href="/signup" className="text-primary font-medium">
-                  Sign up
+                  Create your account.
                 </Link>
               </div>
             </div>
