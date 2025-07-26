@@ -44,8 +44,12 @@ const Footer = () => {
               <span className="text-xl font-bold text-primary">Emergency Credit</span>
             </Link>
             <p className="mt-4 text-sm text-slate-600">
-              Helping contractors and home service businesses get more leads,
-              book more estimates, and win more projects.
+            Headline for Medical Emergency Loan
+
+Quick Medical Loans, When Every Second Matters
+
+Secure Medical Loans. Zero Delays. Real Support.
+             
             </p>
             <div className="mt-6 flex space-x-4">
               {socialLinks.map((link) => (
@@ -85,10 +89,10 @@ const Footer = () => {
         <div className="mt-12 pt-8 border-t border-slate-200">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <p className="text-sm text-slate-500">
-              &copy; {new Date().getFullYear()} MoreEstimates. All rights reserved.
+              &copy; {new Date().getFullYear()} EmergencyCredits.com. All rights reserved.
             </p>
             <p className="text-sm text-slate-500">
-              Made with ❤️ for home service businesses
+              Made with ❤️ for Emergency Credit
             </p>
           </div>
         </div>

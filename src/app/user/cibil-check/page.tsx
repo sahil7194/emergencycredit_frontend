@@ -3,7 +3,6 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-// import { Label } from '@radix-ui/react-dropdown-menu'
 import { Label } from '@/components/ui/label'
 import { LoaderCircle } from 'lucide-react'
 import React, { useState, FormEvent, Suspense } from 'react'
@@ -65,6 +64,23 @@ const CibilCheckPage = () => {
   }, [])
 
   const handleChange = (field: string, value: string) => {
+    if (field === 'date_of_birth') {
+      const selectedDate = new Date(value);
+      const today = new Date();
+      const age = today.getFullYear() - selectedDate.getFullYear();
+      const m = today.getMonth() - selectedDate.getMonth();
+      const dayDiff = today.getDate() - selectedDate.getDate();
+
+      const isUnder18 =
+        age < 18 || (age === 18 && (m < 0 || (m === 0 && dayDiff < 0)));
+
+      if (isUnder18) {
+        // setDobError('You must be at least 18 years old.');
+        alert('You must be at least 18 years old.');
+      } else {
+        // setDobError('');
+      }
+    }
     setData((prev) => ({ ...prev, [field]: value }))
   }
 
@@ -115,7 +131,7 @@ const CibilCheckPage = () => {
                   value={data.full_name}
                   onChange={(e) => handleChange('full_name', e.target.value)}
                   required
-                  placeholder="Jon Doe"
+                  placeholder="Enter your full name"
                 />
               </div>
               <div>
@@ -125,6 +141,8 @@ const CibilCheckPage = () => {
                   value={data.date_of_birth}
                   onChange={(e) => handleChange('date_of_birth', e.target.value)}
                   required
+                  max="2018-12-31"
+                  min="1967-01-01"
                 />
               </div>
               <div>
@@ -147,7 +165,7 @@ const CibilCheckPage = () => {
                   value={data.pan_card_number}
                   onChange={(e) => handleChange('pan_card_number', e.target.value)}
                   required
-                  placeholder="ABCDE1234F"
+                  placeholder="Enter PAN card number"
                 />
               </div>
               <div>

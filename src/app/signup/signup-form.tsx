@@ -16,6 +16,10 @@ export default function SignupForm() {
   const router = useRouter()
 
   React.useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      router.push('/user')
+    }
       setMounted(true);
   }, []);
  const [form, setForm] = useState({
