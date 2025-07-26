@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { useSearchParams } from 'next/navigation'
-import { Label } from '@radix-ui/react-label'
-import { InputError } from '../input-error'
 import { Input } from './input'
 
 interface Props {
