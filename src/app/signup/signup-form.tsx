@@ -40,31 +40,29 @@ export default function SignupForm() {
   }
 
 
-  const validateEmail  = async (email: string) =>{
+  const validateEmail = async (email: string) => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/validate-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({email:email}),
+        body: JSON.stringify({ email: email }),
       })
 
-      console.log('Response status:', res.status);
       if (res.ok) {
         const data = await res.json();
-        
-        if(!data.success){
 
-           setErrors({ email: 'This email ID is already registered.' })
+        if (!data.success) {
+
+          setErrors({ email: 'This email ID is already registered.' })
         }
-    
-        
+
       }
-      
+
     } catch (err) {
       console.error('Update error:', err);
       setErrors({ email: 'Something went wrong. Please try again.' })
     }
-    console.log(email+"validate email");
+
   }
 
   const handleSubmit = async (e: FormEvent) => {
@@ -79,10 +77,9 @@ export default function SignupForm() {
         body: JSON.stringify(form),
       })
 
-      console.log('Response status:', res.status);
       if (!res.ok) {
         const data = await res.json();
-        console.log('Error response:', data);
+
         setErrors(data.errors || { email: 'Signup failed' });
       }
       else {
@@ -94,6 +91,14 @@ export default function SignupForm() {
     }
 
     setProcessing(false)
+  }
+
+  function validateMobileNUmber(mobileNumber: string): void {
+
+    if (mobileNumber.length < 10 || mobileNumber.length > 10) {
+      setErrors({ mobile: 'Invalid Mobile Number' })
+    }
+
   }
 
   return (
@@ -162,12 +167,15 @@ export default function SignupForm() {
                 <div className="flex flex-col gap-1">
                   <Label htmlFor="mobile">Mobile</Label>
                   <Input
+                    type='tel'
                     id="mobile"
                     value={form.mobile}
                     onChange={(e) => handleChange('mobile', e.target.value)}
                     placeholder="9999999999"
                     required
                     autoComplete="tel"
+                    onBlur={(e) => validateMobileNUmber(e.target.value)}
+                    inputMode="numeric" // Optional but helps on mobile keyboards
                   />
                   <InputError message={errors.mobile} />
                 </div>
@@ -182,7 +190,7 @@ export default function SignupForm() {
                     required
                     type="email"
                     autoComplete="email"
-                    onBlur={(e) => { validateEmail(e.target.value)}}
+                    onBlur={(e) => { validateEmail(e.target.value) }}
                   />
                   <InputError message={errors.email} />
                 </div>

@@ -1,19 +1,30 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import '@fontsource/poppins/700.css'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { Menu, ShieldCheck } from 'lucide-react'
+import { Menu, ShieldCheck, LogOut } from 'lucide-react'
 import ThemeToggle from '@/components/theme-toggle'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import Link from 'next/link'
-import { LogOut } from 'lucide-react'
 
 const Header = () => {
   const { user, loading, setUser } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
+ const closeSheetRef = useRef<(() => void) | null>(null)
+
+  // Close sheet and log pathname when route changes
+  useEffect(() => {
+
+    //TODO:: this code will help use to add anlyatics 
+    // console.log('Navigated to:', pathname)
+    if (closeSheetRef.current) {
+      closeSheetRef.current()
+    }
+  }, [pathname])
 
   const logout = async () => {
     const token = localStorage.getItem('token')
@@ -37,7 +48,6 @@ const Header = () => {
     router.push('/login')
   }
 
-  // While loading user info (after refresh, etc.)
   if (loading) {
     return (
       <header className="bg-background/95 sticky top-0 z-50 w-full border-b backdrop-blur-md overflow-x-hidden">
@@ -53,8 +63,7 @@ const Header = () => {
     )
   }
 
-
-  // Navigation based on user type
+  // Dynamic navigation
   let navLinks = [
     { href: '/check-cibil', label: 'Check Cibil' },
     { href: '/blogs', label: 'Blogs' },
@@ -63,9 +72,7 @@ const Header = () => {
 
   if (user?.type === '0') {
     navLinks.unshift({ href: '/user', label: 'Home' })
-    navLinks = navLinks.concat([
-      { href: '/user/application-history', label: 'Application History' },
-    ])
+    navLinks.push({ href: '/user/application-history', label: 'Application History' })
   } else if (user?.type === '1') {
     navLinks = [
       { href: '/agent/home', label: 'Home' },
@@ -119,9 +126,6 @@ const Header = () => {
           <div className="hidden lg:flex items-center gap-3 lg:gap-4 min-w-0">
             {user ? (
               <>
-                {/* <Button variant="outline" className="min-w-[100px] truncate">
-                  {user.name}
-                </Button> */}
                 <Link
                   href={
                     user?.type === '0'
@@ -142,7 +146,6 @@ const Header = () => {
                   </Button>
                 </Link>
 
-
                 <Button
                   onClick={logout}
                   className="border border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors duration-200 flex items-center gap-2"
@@ -150,7 +153,6 @@ const Header = () => {
                   <LogOut className="w-4 h-4" />
                   Logout
                 </Button>
-
               </>
             ) : (
               <>
@@ -164,6 +166,7 @@ const Header = () => {
             )}
           </div>
 
+          {/* MOBILE SHEET */}
           <Sheet>
             <SheetTrigger asChild>
               <Button
@@ -175,7 +178,16 @@ const Header = () => {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="flex flex-col gap-6 p-6">
+            <SheetContent
+              side="right"
+              className="flex flex-col gap-6 p-6"
+              onOpenAutoFocus={() => {
+                closeSheetRef.current = () => {
+                  const escape = new KeyboardEvent('keydown', { key: 'Escape' })
+                  document.dispatchEvent(escape)
+                }
+              }}
+            >
               <SheetHeader className="px-4 pt-4 pb-2">
                 <SheetTitle className="text-base">Menu</SheetTitle>
               </SheetHeader>
@@ -191,6 +203,7 @@ const Header = () => {
                   </Link>
                 ))}
               </nav>
+
               {!user && (
                 <div className="flex flex-col gap-3 lg:hidden">
                   <Button variant="outline" asChild className="w-full">
@@ -202,12 +215,8 @@ const Header = () => {
                 </div>
               )}
 
-
               {user && (
                 <div className="mt-auto flex flex-col gap-3 lg:hidden">
-                  {/* <Button variant="outline" className="w-full" disabled>
-                    {user.name}
-                  </Button> */}
                   <Link
                     href={
                       user?.type === '0'
@@ -228,7 +237,6 @@ const Header = () => {
                     </Button>
                   </Link>
 
-
                   <Button
                     className="w-full border border-blue-600 text-blue-600 bg-transparent hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors duration-200 flex items-center justify-center gap-2"
                     onClick={logout}
@@ -236,7 +244,6 @@ const Header = () => {
                     <LogOut className="w-4 h-4" />
                     Logout
                   </Button>
-
                 </div>
               )}
             </SheetContent>
@@ -248,19 +255,3 @@ const Header = () => {
 }
 
 export default Header
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
